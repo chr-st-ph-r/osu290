@@ -21,10 +21,9 @@ function sortArr( comparator, array ){
         var i = j - 1;
         
         var current = array[j];
-        var next = array[i];
         
-        while (i >= 0 && comparator(current, next)) {
-            array[j] = array[i];
+        while (i >= 0 && comparator(current, array[i])) {
+            array[i+1] = array[i];
             i = i - 1;
         }
         
@@ -45,7 +44,7 @@ function exComparator( int1, int2){
 
 /*This compares two automobiles based on their year. Newer cars are "greater" than older cars.*/
 function yearComparator( auto1, auto2){
-    return auto1.year > auto2.year;
+    return (auto1.year > auto2.year);
 }
 
 /*This compares two automobiles based on their make. It should be case insensitive and makes which are alphabetically earlier in the alphabet are "greater" than ones that come later.*/
@@ -81,3 +80,35 @@ The cars sorted by type are:
 
 As an example of the content in the parenthesis:
 1990 Ford F-150 */
+
+Automobile.prototype.logMe = function(showType) {
+    if (showType) {
+        return this.year + " " + this.make + " " + this.model + " " + this.type;
+    } else {
+        return this.year + " " + this.make + " " + this.model;
+    }
+}
+
+var showType = true;
+
+console.log("*****");
+
+console.log("The cars sorted by year are:");
+sortArr(yearComparator, automobiles);
+automobiles.forEach(function(auto) {
+    console.log(auto.logMe(showType));
+});
+
+console.log("The cars sorted by make are:");
+//sortArr(makeComparator, automobiles);
+automobiles.forEach(function(auto) {
+    console.log(auto.logMe(showType));
+});
+
+console.log("The cars sorted by type are:");
+//sortArr(typeComparator, automobiles);
+automobiles.forEach(function(auto) {
+    console.log(auto.logMe(showType));
+});
+
+console.log("*****");
