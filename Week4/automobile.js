@@ -16,7 +16,20 @@ var automobiles = [
 
 /*This function sorts arrays using an arbitrary comparator. You pass it a comparator and an array of objects appropriate for that comparator and it will return a new array which is sorted with the largest object in index 0 and the smallest in the last index*/
 function sortArr( comparator, array ){
-    /*your code here*/
+    // simple insertion sort since our array sizes are small anyway
+    for (var j = 1; j < array.length; j++) {       
+        var i = j - 1;
+        
+        var current = array[j];
+        var next = array[i];
+        
+        while (i >= 0 && comparator(current, next)) {
+            array[j] = array[i];
+            i = i - 1;
+        }
+        
+        array[i+1] = current;
+    }
 }
 
 /*A comparator takes two arguments and uses some algorithm to compare them. If the first argument is larger or greater than the 2nd it returns true, otherwise it returns false. Here is an example that works on integers*/
@@ -32,17 +45,17 @@ function exComparator( int1, int2){
 
 /*This compares two automobiles based on their year. Newer cars are "greater" than older cars.*/
 function yearComparator( auto1, auto2){
-    /* your code here*/
+    return auto1.year > auto2.year;
 }
 
 /*This compares two automobiles based on their make. It should be case insensitive and makes which are alphabetically earlier in the alphabet are "greater" than ones that come later.*/
 function makeComparator( auto1, auto2){
-    /* your code here*/
+    return auto1.make > auto2.make;
 }
 
 /*This compares two automobiles based on their type. The ordering from "greatest" to "least" is as follows: roadster, pickup, suv, wagon, (types not otherwise listed). It should be case insensitive. If two cars are of equal type then the newest one by model year should be considered "greater".*/
 function typeComparator( auto1, auto2){
-    /* your code here*/
+    return auto1.type > auto2.type;
 }
 
 /*Your program should output the following to the console.log, including the opening and closing 5 stars. All values in parenthesis should be replaced with appropriate values. Each line is a seperate call to console.log.
