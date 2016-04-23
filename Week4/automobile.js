@@ -70,6 +70,7 @@ function typeComparator( auto1, auto2){
     type1 = type1.toUpperCase();
     type2 = type2.toUpperCase();
     
+    // let's assign each type an arbitrary relative value
     var types = {
         "ROADSTER" : 4,
         "PICKUP" : 3,
@@ -77,23 +78,14 @@ function typeComparator( auto1, auto2){
         "WAGON" : 1,
     }
     
-
+    // if these are the same types, use yearComparator
     if (type1 === type2) {
         return yearComparator(auto1, auto2);
     }
     
-    // perhaps there is a more elegant way to handle this?
-    if (type1 in types) {
-        type1 = types[type1];
-    } else {
-        type1 = 0;
-    }
-    
-    if (type2 in types) {
-        type2 = types[type2];
-    } else {
-        type2 = 0;
-    }
+    // now let's convert our strings into numerical values
+    type1 = (type1 in types) ? types[type1] : 0;
+    type2 = (type2 in types) ? types[type2] : 0;
     
     return type1 > type2;
 }
@@ -130,26 +122,24 @@ Automobile.prototype.logMe = function(showType) {
     }
 }
 
-var showType = true;
-
 console.log("*****");
 
 console.log("The cars sorted by year are:");
 sortArr(yearComparator, automobiles);
 automobiles.forEach(function(auto) {
-    console.log(auto.logMe(showType));
+    console.log(auto.logMe(false));
 });
 
 console.log("The cars sorted by make are:");
 sortArr(makeComparator, automobiles);
 automobiles.forEach(function(auto) {
-    console.log(auto.logMe(showType));
+    console.log(auto.logMe(false));
 });
 
 console.log("The cars sorted by type are:");
 sortArr(typeComparator, automobiles);
 automobiles.forEach(function(auto) {
-    console.log(auto.logMe(showType));
+    console.log(auto.logMe(true));
 });
 
 console.log("*****");
