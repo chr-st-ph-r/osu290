@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>HTML/CSS Assignment</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+    <!-- table --> 
+        <table class="table-content">
+            <caption>Let's rate the mixture of various delicious flavors</caption>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Chocolate</th>
+                    <th>Banana</th>
+                    <th>Caramel</th>
+                    <th>Vanilla</th>
+                    <th>Peanut Butter</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><i>Chocolate</i></td><td>Same!</td><td>Pretty solid</td><td>Too much!</td><td>Classic</td><td>DESSERT GOD</td>
+                </tr>
+                <tr>
+                    <td><i>Banana</i></td><td>Pretty solid</td><td>Same!</td><td>Might be weird</td><td>Not a bad milkshake</td><td>Great for camping!</td>
+                </tr>
+                <tr>
+                    <td><i>Caramel</i></td><td>Delicious</td><td>Might be weird</td><td>Same!</td><td>Definite winner</td><td>Tasty</td>
+                </tr>
+                <tr>
+                    <td><i>Vanilla</i></td><td>Classic</td><td>Not a bad milkshake</td><td>Definite winner</td><td>Same!</td><td>DESSERT GOD</td>
+                </tr>
+                <tr>
+                    <td><i>Peanut Butter</i></td><td>DESSERT GOD</td><td>Great for camping</td><td>Tasty</td><td>DESSERT GOD</td><td>Same!</td>
+                </tr>
+                <tr class="foot">
+                    <td colspan="2">Check out my footer</td><td colspan="4">Cool!</td>
+                </tr>
+            </tbody>
+        </table>
+
+    <!-- list -->
+        <ul class="list-content">Here's an unordered list:
+            <li>First</li>
+            <li>Second</li>
+            <li>Third</li>
+        </ul>
+        
+    <!-- div -->
+        <div class="outer-content">
+            <div class="inner-content">CONTENT</div>
+        </div>
+        
+    <!-- GET form -->
+        <form action="http://classes.engr.oregonstate.edu/eecs/winter2015/cs290-400/tools/class-content/form_tests/check_request.php" method="get">
+            <fieldset><legend>GET</legend>
+                <fieldset>
+
+                    <label>Text input:
+                        <input type="text" name="text_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    <label>Number input: 
+                        <input type="number" name="numerical_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    <label>Password input:
+                        <input type="password" name="password_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    Select between:</br>
+                    <label>
+                    <input type="radio" name="candy" value="Snickers">Snickers</label>
+                    </br>
+                    <label>
+                    <input type="radio" name="candy" value="Skittles">Skittles</label>
+                    </br>
+                    <label>
+                    <input type="radio" name="candy" value="Mentos">Mentos</label>
+                    </br>
+                    <input type="submit">
+                </fieldset>
+            </fieldset>
+        </form>
+
+        </br>
+
+    <!-- POST form -->
+        <form action="http://classes.engr.oregonstate.edu/eecs/winter2015/cs290-400/tools/class-content/form_tests/check_request.php" method="post">
+            <fieldset> <legend>POST</legend>
+                <fieldset>
+
+                    <label>Text input:
+                        <input type="text" name="text_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    <label>Number input: 
+                        <input type="number" name="numerical_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    <label>Password input:
+                        <input type="password" name="password_input">
+                    </label>
+                    </br>
+                </fieldset>
+                <fieldset>
+                    Select between:</br>
+                    <label>
+                    <input type="radio" name="candy" value="Snickers">Snickers</label>
+                    </br>
+                    <label>
+                    <input type="radio" name="candy" value="Skittles">Skittles</label>
+                    </br>
+                    <label>
+                    <input type="radio" name="candy" value="Mentos">Mentos</label>
+                    </br>
+                    <input type="submit">
+                </fieldset>
+            </fieldset>
+        </form>
+
+    </body>
+    </html>

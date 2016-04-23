@@ -1,0 +1,31 @@
+.outer-content {
+    background: pink;
+    width: 75%;
+    margin: 20px auto;
+}
+
+.inner-content {
+    background: blue;
+    width: 75%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+td:nth-child(even) {
+    background: orange;
+    color: black;
+}
+
+td:nth-child(odd) {
+    background: black;
+    color: orange;
+}
+
+.foot > td {
+    background: white;
+    color: black;
+}
+
+td {
+    border: 3px solid black;
+}
