@@ -53,8 +53,8 @@ function makeComparator( auto1, auto2){
     var make2 = auto2.make;
     
     // for case insensitivity
-    make1.toUpperCase();
-    make2.toUpperCase();
+    make1 = make1.toUpperCase();
+    make2 = make2.toUpperCase();
     
     // since letters beginning earlier in the alphabet are "greater" in this case,
     // we will invert the logic javascript uses to determine lexigraphic value
@@ -63,7 +63,39 @@ function makeComparator( auto1, auto2){
 
 /*This compares two automobiles based on their type. The ordering from "greatest" to "least" is as follows: roadster, pickup, suv, wagon, (types not otherwise listed). It should be case insensitive. If two cars are of equal type then the newest one by model year should be considered "greater".*/
 function typeComparator( auto1, auto2){
-    return auto1.type > auto2.type;
+    var type1 = auto1.type;
+    var type2 = auto2.type;
+    
+    // case insensitivity
+    type1 = type1.toUpperCase();
+    type2 = type2.toUpperCase();
+    
+    var types = {
+        "ROADSTER" : 4,
+        "PICKUP" : 3,
+        "SUV" : 2,
+        "WAGON" : 1,
+    }
+    
+
+    if (type1 === type2) {
+        return yearComparator(auto1, auto2);
+    }
+    
+    // perhaps there is a more elegant way to handle this?
+    if (type1 in types) {
+        type1 = types[type1];
+    } else {
+        type1 = 0;
+    }
+    
+    if (type2 in types) {
+        type2 = types[type2];
+    } else {
+        type2 = 0;
+    }
+    
+    return type1 > type2;
 }
 
 /*Your program should output the following to the console.log, including the opening and closing 5 stars. All values in parenthesis should be replaced with appropriate values. Each line is a seperate call to console.log.
@@ -115,7 +147,7 @@ automobiles.forEach(function(auto) {
 });
 
 console.log("The cars sorted by type are:");
-//sortArr(typeComparator, automobiles);
+sortArr(typeComparator, automobiles);
 automobiles.forEach(function(auto) {
     console.log(auto.logMe(showType));
 });
