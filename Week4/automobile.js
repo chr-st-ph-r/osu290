@@ -49,7 +49,16 @@ function yearComparator( auto1, auto2){
 
 /*This compares two automobiles based on their make. It should be case insensitive and makes which are alphabetically earlier in the alphabet are "greater" than ones that come later.*/
 function makeComparator( auto1, auto2){
-    return auto1.make > auto2.make;
+    var make1 = auto1.make;
+    var make2 = auto2.make;
+    
+    // for case insensitivity
+    make1.toUpperCase();
+    make2.toUpperCase();
+    
+    // since letters beginning earlier in the alphabet are "greater" in this case,
+    // we will invert the logic javascript uses to determine lexigraphic value
+    return make1 < make2;
 }
 
 /*This compares two automobiles based on their type. The ordering from "greatest" to "least" is as follows: roadster, pickup, suv, wagon, (types not otherwise listed). It should be case insensitive. If two cars are of equal type then the newest one by model year should be considered "greater".*/
@@ -100,7 +109,7 @@ automobiles.forEach(function(auto) {
 });
 
 console.log("The cars sorted by make are:");
-//sortArr(makeComparator, automobiles);
+sortArr(makeComparator, automobiles);
 automobiles.forEach(function(auto) {
     console.log(auto.logMe(showType));
 });
