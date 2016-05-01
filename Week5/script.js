@@ -1,23 +1,32 @@
+/** Week 5 HW
+ * Christopher Carrassi
+ */
+
+/**
+ * Table class, keeping everything tidy
+ * @constructor
+ */
 function Table(size = 4) {
   this.SIZE = size;
+
+  // the table itself
   this.grid = [];
+
+  // represents x,y coords of currently selected cell
   this.focus = [0,0];
 }
 
+/** pushes a new cell element into the Table
+ * @param {Object} cell HTML element to be added
+ */
 Table.prototype.addCell = function(cell) {
   this.table.push(cell);
 }
-
-Table.prototype.moveX = function(x) {
-
-  this.focus[0] = focusX;
-}
-
-Table.prototype.moveY = function(y) {
-
-  this.focus[1] = focusY;
-}
-
+/**
+ * shifts the table's focus
+ * @param {Integer} x the desired amount to move horizontally
+ * @param {Integer} y the desired amount to move vertically
+ */
 Table.prototype.move = function (x, y) {
   var focusX = this.focus[0];
   var focusY = this.focus[1];
@@ -35,13 +44,19 @@ Table.prototype.move = function (x, y) {
     return;
   }
 
-
+  // procedure to modify focus state without selecting multiple cells
   this.highlight(false);
   this.focus[0] = focusX;
   this.focus[1] = focusY;
   this.highlight(true);
 };
 
+/**
+ * Helper function that makes it easier to create, modify and append
+ * elements to the DOM.
+ * @param {Object} obj, a simple map of options for the elements
+ * @return {Element} The newly created element
+ */
 Table.prototype.make = function(obj) {
   var e = document.createElement(obj.elem);
 
@@ -60,6 +75,9 @@ Table.prototype.make = function(obj) {
   return e;
 }
 
+/* enables or disables the selected cell's appearance of being selected
+ * @param {Boolean} turnOn, the on/off switch
+ */
 Table.prototype.highlight = function(turnOn) {
   var x = this.focus[0];
   var y = this.focus[1];
@@ -72,11 +90,18 @@ Table.prototype.highlight = function(turnOn) {
   }
 }
 
+/**
+ * Permanently marks the cell yellow
+ */
 Table.prototype.mark = function() {
   var cell = this.grid[this.focus[1]][this.focus[0]];
   cell.style.background = "yellow";
 }
 
+/**
+ * Builds the table elements and stores them internally in the Table instance
+ * @param {Element} container, the element where the table will be built
+ */
 Table.prototype.populateGrid = function(container) {
   for (var i = 0; i < this.SIZE; i++) {
     var row = this.make({
@@ -90,7 +115,7 @@ Table.prototype.populateGrid = function(container) {
       var cell = this.make({
         elem: "td",
         father: row,
-        text: (i+1) + ", " + (j+1),
+        text: (j+1) + ", " + (i+1),
       });
 
       cell.style.border = "1px solid black";
@@ -100,6 +125,9 @@ Table.prototype.populateGrid = function(container) {
   }
 }
 
+/**
+ * Generates elements needed for the controller
+ */
 Table.prototype.buildController = function() {
   var container = this.make({
     elem: "div",
@@ -152,6 +180,10 @@ Table.prototype.buildController = function() {
   });
 }
 
+/**
+ * Generates the basic structure of the HTML page and then executes
+ * the table and controller build routines
+ */
 Table.prototype.init = function() {
   var main = this.make({
     elem: "table",
