@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.story {
+  display: inline;
+  line-height: 1.5rem;
+  font-family: Arial, sans-serif;
+}
+
+#ticker {
+  background: black;
+  width: 110%;
+  height: 1.5rem;
+  overflow: hidden;
+  animation: marquee 150s linear infinite;
+}
+
+.section {
+  font-weight: bold;
+  text-transform: lowercase;
+  color: red;
+  margin-right: .2rem;
+}
+
+.headline {
+  text-transform: uppercase;
+  color: white;
+  margin-right: .2rem;
+  font-weight: bolder;
+}
+
+.trail {
+  color: #F7F1B9;
+}
+
+.seperator {
+  color: white;
+  font: large;
+}
+
+.body {
+  display: none;
+  
+}
+
+@keyframes marquee {
+    0%   { text-indent: 10em }
+    100% { text-indent: -900em }
+}

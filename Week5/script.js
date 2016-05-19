@@ -3,11 +3,10 @@
  */
 
 /**
- * Table class, keeping everything tidy
+ * Table class, keeping everything tidy and the state internal
  * @constructor
  */
-function Table(size = 4) {
-  this.SIZE = size;
+function Table() {
 
   // the table itself
   this.grid = [];
@@ -34,12 +33,12 @@ Table.prototype.move = function (x, y) {
   focusX += x;
   focusY += y;
 
-  if (focusX < 0 || focusX >= this.SIZE) {
+  if (focusX < 0 || focusX >= 4) {
     console.log("New X coord is out of bounds!");
     return;
   }
 
-  if (focusY < 0 || focusY >= this.SIZE) {
+  if (focusY < 0 || focusY >= 3) {
     console.log("New Y coord is out of bounds!");
     return;
   }
@@ -103,7 +102,7 @@ Table.prototype.mark = function() {
  * @param {Element} container, the element where the table will be built
  */
 Table.prototype.populateGrid = function(container) {
-  for (var i = 0; i < this.SIZE; i++) {
+  for (var i = 0; i < 3; i++) {
     var row = this.make({
       elem: "tr",
       father: container,
@@ -111,7 +110,7 @@ Table.prototype.populateGrid = function(container) {
 
     this.grid.push([]);
 
-    for (var j = 0; j < this.SIZE; j++) {
+    for (var j = 0; j < 4; j++) {
       var cell = this.make({
         elem: "td",
         father: row,

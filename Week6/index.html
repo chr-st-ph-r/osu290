@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Ajax Assignment</title>
+  <meta name="author" content="Chris Carrassi">
+</head>
+
+<body>
+  <form action="" method="" id="weather_form">
+    <label for="city">Insert city here [default]</label><br>
+    <input type="text" name="city" id="city"></input><p>
+    <label for="zip">Insert zip here</label><br>
+    <input type="text" name="zip" id="zip"></input><p>
+    <input type="button" value="Submit" id="weather_submit">
+  </form>
+  <div id="weather_output"></div><p>
+
+  <form action="" method="post" id="http_form">
+    <label for="http_text">Insert text here</label><br>
+    <input type="text" name="http_text" id="http_text"></input>
+    <input type="button" value="Submit" id="http_submit"></input>
+  </form>
+  <div id="http_output"></div><p>
+  <script src="util.js"></script>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

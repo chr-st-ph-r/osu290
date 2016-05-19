@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Guardian API - A Tutorial for Beginners</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Personal CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Guardian API Tutorial</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Welcome</a></li>
+          <li><a href="intro.html">Introduction</a></li>
+          <li><a href="key.html">Keys</a></li>
+          <li class="active"><a href="request.html">Requests</a></li>
+          <li><a href="data.html">Data</a></li>
+          <li><a href="ticker.html">Application</a></li>
+          <li><a href="final.html">Final</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>API Requests</h1>
+
+      <h2>The Anatomy of an API Request</h2>
+      <p>When you want to read the news online, you make a request to the news organization's server by navigating to
+        a URL in your browser -- something like <code>http://www.theguardian.com/</code>. As you may have guessed, machines
+        prefer to do it a little differently. A machine might navigate to <code>http://content.guardianapis.com/</code> as
+        that is the URL which provides the same data but in a format machines love to read -- JSON! (more on that later)</p>
+
+      <p>Let's navigate to that second URL in our browser to see what a machine would see:</p>
+
+      <div class="container"><p><img class="img-thumbnail" src="images/req1.png" /></p></div>
+
+      <p>Ah yes, that pesky key again. Looks like we forgot to include it. We can include it a few different ways, but the
+        easiest is simply to include it in the URL itself as a parameter (denoted by a <code>?</code>) which we'll use to pass in our key -- let's try something like <code>http://content.guardianapis.com/?api-key=<i>your-api-key</i></code>
+        and see what we get:</p>
+
+      <div class="container"><p><img class="img-thumbnail" src="images/req2.png" /></p></div>
+
+      <p>OK, not quite what we expected, but better! We actually just need to add a bit to our request. This brings up another
+        important concept when dealing with APIs -- endpoints. Endpoints are really just another kind of URL suffix, but they
+        allow API developers to organize their content in a logical way. The Guardian, for example, has endpoints for news sections,
+        tags, editions, and general content. We'll focus on the last one, which uses the suffix <code>search</code>, with yet another URL -- <code>http://content.guardianapis.com/<b>search</b>?api-key=<i>your-api-key</i></code> --
+        and let's see what happens:
+
+      <div class="container"><p><img class="img-thumbnail" src="images/req3.png" /></p></div>
+
+      <p>Nice! We have some meaningful data, actually enough to implement a basic news ticker. But in looking it over: it doesn't look like it includes everything, does it?
+        We can see some interesting things, like the type, section, title, and URL of each article in The Guardian's database we requested. We can
+        see that we have 10 total items, sorted by newest, and that this represents one "page" of articles out of nearly 200,000! But where are all of those articles? Where's the rest of the data, like
+        the subheadline or the body of the article itself? Obviously there is a lot we might be missing.</p>
+
+      <p>We can fix this the same way we fixed the key issue, with parameters! You can add quite a few parameters to this request which will
+        filter the type of data we receive. These filters include tags, section, page, page size, dates, and more, and we can use them in a familiar way:
+        <code>http://content.guardianapis.com/search?api-key=<i>your-api-key</i><b>&q=ireland&page-size=20</b></code>.</p>
+
+      <p>Take a look at the bolded part we added. <code>&</code> is glue which holds the different parameters together in the same request. Each parameter
+        includes a corresponding value, so you can supply a search parameter <code>q</code> with the value "ireland" to search for all articles
+        about Ireland. Since we specified a <code>page-size</code> paramater with the value 20, we'll get 20 articles instead of 10 (assuming, of course, they have
+        written 20 articles on a given subject).</p>
+
+        We could easily make the call using the URL above. But let's arbitrarily say we want the second page of 20 articles. We could append <code>&page=2</code> to our URL. Here is what we might get:
+
+        <div class="container"><p><img class="img-thumbnail" src="images/req4.png" /></p></div>
+
+      <p>One of the more more powerful parameters available to you isn't much celebrated in the API documentation. That parameter
+        is <code>show-fields</code>, to which you can pass values like "headline" to retrieve the field for headline in the article. But it's possible to pass in
+        the value of "all" to get all of the data and metadata associated with that article, including the headline, date, byline, and even the full body of the article itself. So now the URL would look something
+        like <code>http://content.guardianapis.com/search?api-key=<i>your-api-key</i><b>&q=ireland&page-size=20&page=2&show-fields=all</b></code>.</p>
+
+      <div class="container"><p><img class="img-thumbnail" src="images/req6.png" /></p></div>
+
+      <p>If you haven't already, I encourage you to try this yourself. There's quite a bit of data there now. You'll notice that under the <code>requests</code>
+        header there now appears <code>fields</code> and a lot more data, including the headline, trail text (we'll talk more about that), and even the full body of the article
+        (in HTML format, interestingly). However, we don't really need all of that for a news ticker. We really just need two of the fields -- headline and trailText. And in the
+        interest of keeping this light, let's try: <code>http://content.guardianapis.com/search?api-key=<i>your-api-key</i><b>&q=ireland&page-size=20&page=2&show-fields=headline,trailText</b></code>.</p>
+
+      <p>Here is what you should be seeing after making this request:</p>
+
+      <div class="container"><p><img class="img-thumbnail" src="images/req5.png" /></p></div>
+
+      <p>You might be wondering about all of the different parameters and values you can use to customize your requests. You can see them listed out for the Content endpoint <a href="http://open-platform.theguardian.com/documentation/search">here</a>.
+        Let's use a few more to narrow down the content we get. Since I'm an American, let's perversely use a British newspaper to supply us with content focused only on the US using the <code>section</code> parameter.
+        Additionally, if you've tried a few of these calls already, you may notice that there is "live blogging" content included. By their nature, the headlines for these articles don't tend to be
+        very descriptive and thus don't lend themselves well to the purpose of making a news ticker, which needs concise, descriptive text only. We can filter out any article that matches the "liveblogging" type using an undocumented parameter <code>type</code>
+        and a simple logical operand. Voila: <code>http://content.guardianapis.com/search?api-key=<i>your-api-key</i><b>&page-size=50&show-fields=headline,trailText& section=us-news&type=-liveblog</b></code>. Let's discuss a few things:</p>
+
+          <ul>
+            <li>We've removed the query for ireland and the page value since that's not very relevant</li>
+            <li>We've added <code>section=us-news</code> to grab only the content published in that section. All of the available sections you can use to filter aren't really
+              listed anywhere to my knowledge, so you may have to play around to get some right (Trial by error: us-news vs. US-news vs. usnews? Use the <a href="http://open-platform.theguardian.com/explore/">API explorer</a> to find out quickly)</li>
+            <li>We've added another parameter <code>type=-liveblogging</code>. Using the '-' character in front of the value works like a NOT operator, grabbing only the items that don't have that type. Similarly, the ',' between the values we pass to <code>show-fields</code>
+              functions like an AND operator.</li>
+            </ul>
+      <p>All in all, that's a solid query we have there. Even better, we have a good understanding of what parameters we have available to filter content and how to do it by modifying our request URL.
+        Along with the API documentation and some patience, you can construct any number of potential queries. </p>
+        <p>
+          <a class="btn btn-primary" href="data.html" role="button">Next »</a>
+        </p>
+
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </body>
+</html>

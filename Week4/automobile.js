@@ -1,3 +1,7 @@
+// automobile.js
+// CS 290
+// Christopher Carrassi
+
 function Automobile( year, make, model, type ){
     this.year = year; //integer (ex. 2001, 1995)
     this.make = make; //string (ex. Honda, Ford)

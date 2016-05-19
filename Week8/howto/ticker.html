@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Guardian API - A Tutorial for Beginners</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Personal CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Guardian API Tutorial</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Welcome</a></li>
+          <li><a href="intro.html">Introduction</a></li>
+          <li><a href="key.html">Keys</a></li>
+          <li><a href="request.html">Requests</a></li>
+          <li><a href="data.html">Data</a></li>
+          <li class="active"><a href="ticker.html">Application</a></li>
+          <li><a href="final.html">Final</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1>API Application</h1>
+
+      <h2>Building a News Ticker</h2>
+      <p>Now that we've done all the hard work, all we have left is the fun and easy part. Building something!</p>
+
+      <p>Let's begin by looking at the entirety of the code we'll use to make the ticker. Chances are this structure is familiar to you, but if not we'll go through it
+        piece by piece:</p>
+
+      <pre>var Ticker = {
+
+  base_url: "https://content.guardianapis.com/search?api-key=" + config.key,
+  stories: [],
+
+  getStories: function(params) {
+    var url = ((params) ? Ticker.base_url + params : Ticker.base_url);
+
+    $.ajax({
+      url: url
+    })
+
+    .fail(function(xhr, textStatus, errorThrown) {
+      console.log(errorThrown);
+    })
+
+    .success(function(resp) {
+      var data = resp.response.results;
+      data.forEach(function(article) {
+        var story = {
+          headline: article.fields.headline,
+          trail: article.fields.trailText,
+          section: article.sectionName,
+          url: article.webUrl
+        }
+        Ticker.stories.push(story);
+      });
+      Ticker.buildTape();
+    });
+
+  },
+
+  buildTape: function() {
+    Ticker.stories.forEach(function(story) {
+
+      var $story = $('&lt;div class="story"&gt;&lt;/div&gt;');
+
+      var $seperator = $('&lt;span class="seperator"&gt;&lt;/span&gt;')
+        .text(" #")
+        .appendTo($story);
+
+      var $section = $('&lt;span class="section"&gt;&lt;/span&gt;')
+        .html(story.section)
+        .appendTo($story);
+
+      var $headline = $('&lt;span class="headline"&gt;&lt;/span&gt;')
+        .html(story.headline)
+        .appendTo($story);
+
+      var $trail = $('&lt;span class="trail"&gt;&lt;/span&gt;')
+        .html(story.trail)
+        .appendTo($story);
+
+      var $seperator = $('&lt;span class="seperator"&gt;&lt;/span&gt;')
+        .text(" /// ")
+        .appendTo($story);
+
+      $story.appendTo('#ticker');
+
+    })
+  },
+}
+
+$(document).ready(function() {
+  Ticker.getStories("&page-size=50&show-fields=headline,trailText");
+});</pre>
+
+<p>First, I've gone ahead and thrown this all into a simple object literal named Ticker, which has 2 properties (base_url and stories)
+  as well as 2 methods (getStories and buildTape). Let's start with the properties.</p>
+
+<pre>  base_url: "https://content.guardianapis.com/search?api-key=" + config.key,
+  stories: [],</pre>
+
+<p>If you recall from the Requests section, the changes we made to the parameters we included in the URL only affected the latter part
+  of the URL string. So here I've created a "base" URL that we store in a variable so that we can simply add whichever parameters we'd
+  like without having to rewrite the entire URL over and over. You may also recall my warning about hiding your API key, which I have
+  hidden in a separate object called "config" which is loaded in a separate script. You can do the same, or just replace <code>config.key</code>
+  with your own key.</p>
+
+<p><code>stories</code> we'll use to actually store the articles we get in our request. Speaking of which, let's move on to the
+  <code>getStories</code> method to see how that works:</p>
+
+<pre>getStories: function(params) {
+  var url = ((params) ? Ticker.base_url + params : Ticker.base_url);
+
+  $.ajax({
+    url: url
+  })
+
+  .fail(function(xhr, textStatus, errorThrown) {
+    console.log(errorThrown);
+  })
+
+  .success(function(resp) {
+    var data = resp.response.results;
+    data.forEach(function(article) {
+      var story = {
+        headline: article.fields.headline,
+        trail: article.fields.trailText,
+        section: article.sectionName,
+        url: article.webUrl
+      }
+      Ticker.stories.push(story);
+    });
+    Ticker.buildTape();
+  });
+
+},</pre>
+
+<p>Let's discuss right away what's going on with our var <code>url</code>. If you aren't familiar with ternary operators, it might seem
+  a bit confusing. But basically this is a cheap, one-line if-then statement. If we've passed a string of parameters to the getStories
+  function, this expression will return the base URL plus the parameters, or just the base URL. This way we can easily pass in parameters
+  if we want, but if we don't, no big deal.</p>
+
+<p>Since we've already gone over what <code>$.ajax()</code> is doing, let's talk about what's new in the <code>.success()</code> method.
+We're first taking the array of 50 articles we got in our response and storing them in a var called <code>data</code>.
+Instead of simply logging data to the console, we've created an object we'll temporarily call <code>story</code> which includes properties for each
+bit of data we'll need. We pull that data out of each article we stored in <code>data</code>, bundle it in a new object, and then push that object
+into our <code>stories</code> array to be used later.</p>
+
+<p>Once we've done that for all 50 articles, we're ready to actually build the ticker. That's what <code>.buildTape()</code> is for!</p>
+
+<pre>buildTape: function() {
+  Ticker.stories.forEach(function(story) {
+
+    var $story = $('&lt;div class="story"&gt;&lt;/div&gt;');
+
+    var $seperator = $('&lt;span class="seperator"&gt;&lt;/span&gt;')
+      .text(" #")
+      .appendTo($story);
+
+    var $section = $('&lt;span class="section"&gt;&lt;/span&gt;')
+      .html(story.section)
+      .appendTo($story);
+
+    var $headline = $('&lt;span class="headline"&gt;&lt;/span&gt;')
+      .html(story.headline)
+      .appendTo($story);
+
+    var $trail = $('&lt;span class="trail"&gt;&lt;/span&gt;')
+      .html(story.trail)
+      .appendTo($story);
+
+    var $seperator = $('&lt;span class="seperator"&gt;&lt;/span&gt;')
+      .text(" /// ")
+      .appendTo($story);
+
+    $story.appendTo('#ticker');
+
+  })
+},</pre>
+
+<p>This method begins by iterating over every article we've stored in <code>stories</code>. Then, using jQuery's
+  DOM creation methods, we will actually build the HTML elements, store data in them, and then append them to the page.</p>
+
+  <ul>
+    <li><code>$story</code> functions as a container of sorts. It's a <code>div</code> element we've created from a string (thanks jQuery!) with a class "story"
+  that we'll use to apply cosmetic finish to it later with CSS. </li>
+    <li>The <code>$seperator</code>s are just <code>span</code> elements stuffed with simple bits of text to
+  delineate each piece of data. We use the method <code>.appendTo()</code> to add both these and the following elements to our <code>$story</code> container.</li>
+    <li><code>$section</code> is another element where we will stick the section the article came from, e.g. "Sports", "Politics".
+    I thought it might be a cool way to help the viewer determine quickly if the scrolling story was interesting to them or not.</li>
+    <li><code>$headline</code> is yet another <code>span</code> element which we'll use to hold the headline.</li>
+    <li><code>$trail</code> we'll use to hold something The Guardian calls "trail text". It functions as a subheadline; a string of text
+      longer than a headline which summarizes or provides additional details about the article's subject. Usually it produces brief,
+      readable text you can use to supplement headlines without overwhelming the viewer with a long article.</li>
+  </ul>
+
+  <p>Finally, after building our <code>$story</code> we will append it to an element in the DOM with the id of "ticker", which you would
+    have to put in yourself either by hand in the HTML document that runs this script, or dynamically using another script. Throw the
+  <code>getStories()</code> method into a <code>$.document.ready()</code> call and we are in business:</p>
+
+  <pre>$(document).ready(function() {
+  Ticker.getStories("&page-size=50&show-fields=headline,trailText");
+});</pre>
+
+  <p>Notice how we pass in parameters to the method using a simple string that is appended to the URL -- this can be easily chaged to vary up your
+  requests. What you will end up with are 50 <code>$story</code> elements added to your page, each with several child elements that discretely contain each data point, each with associated classes
+that allow us to cosmetically adjust their appearance as we please. This is a good place to be, because with a little CSS (which we won't cover here as it's outside of our scope, and not particularly well-executed) we have: </p>
+
+<div class="container"><p><img class="img-thumbnail" src="images/ticker1.png" /></p></div>
+
+<p>You can imagine that this will scroll left (thanks to CSS transitions), or see an actual working example of this (you will need to supply your own API key!) here at <a href="http://codepen.io/ccarrassi/pen/Xdwvax">this CodePen</a>.</p>
+
+        <p>
+          <a class="btn btn-primary" href="final.html" role="button">Next »</a>
+        </p>
+
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>

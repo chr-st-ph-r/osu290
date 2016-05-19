@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Guardian API - A Tutorial for Beginners</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Personal CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Guardian API Tutorial</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li ><a href="index.html">Welcome</a></li>
+          <li><a href="intro.html">Introduction</a></li>
+          <li><a href="key.html">Keys</a></li>
+          <li><a href="request.html">Requests</a></li>
+          <li class="active"><a href="data.html">Data</a></li>
+          <li><a href="ticker.html">Application</a></li>
+          <li><a href="final.html">Final</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container">
+    <h1>API Data</h1>
+    <h2>Working with Machine Data in JavaScript</h2>
+
+    <p>So we have a good idea of how to get machine-readable data in our browser. But now let's talk about how to get that into our
+      JavaScript applications and how to actually use it once it's there.</p>
+
+    <p>For this section, I'm going to assume some basic knowledge about the following:</p>
+    <ul>
+      <li>JavaScript</li>
+      <li>AJAX</li>
+      <li>jQuery</li>
+    </ul>
+
+    <p>For simplicity we're going to use jQuery's <code>.ajax()</code> method to make our requests. It could look a bit like this (notice we've
+      changed the URL a bit): </p>
+
+    <pre>
+      $.ajax({
+        url: "http://content.guardianapis.com/search?api-key=your-api-key&page-size=50&show-fields=headline,trailText& section=us-news&type=-liveblog"
+      })
+
+      .fail(function(xhr, textStatus, errorThrown) {
+        console.log(errorThrown);
+      })
+
+      .success(function(resp) {
+        console.log(resp);
+      });</pre>
+
+    <p>The first part of this code uses jQuery's super simple <code>ajax()</code> method to make a HTTP request to the supplied URL, which we have put into
+      an object parameter. This executes a routine not unlike the one initiated when you put the URL into your browser,
+      except the data you get can be stored and used in your application.
+      The second part of this code just handles a bad request by outputting the error message to the console, while the final part of the code handles
+      a good request, which is what we'll focus on. Here, we simply output the full response to the console, but we could just
+    as easily pass the response data to any part of our application.</p>
+
+    <p>Here's what we get in the console for the call above:</p>
+    <div class="container"><p><img class="img-thumbnail" src="images/data0.png" /></p></div>
+
+    <h2>Dealing with JSON</h2>
+    <p>Let's take a moment to talk about JSON. Yet another acronym, this one stands for <b>J</b>ava<b>S</b>cript <b>O</b>bject <b>N</b>otation.
+      What you see in the console is data mapped out such that you can operate on it very much like it's a native object in
+      JavaScript. The <code>resp</code> object we're passing around thus has properties we can access just like any other
+      object in JavaScript; if we want to dig into the data, we really need <code>resp.response</code>. And if we look even closer,
+      we see that most of the actual data we need is stored in <code>resp.response.results</code> where we have 50 articles stored in an
+      array. So let's try outputting <code>resp.response.results</code> to the console instead:</p>
+
+    <div class="container"><p><img class="img-thumbnail" src="images/data1.png" /></p></div>
+
+    <p>Great! Looks like we literally have an array of articles, which are themselves objects with properties we can access in
+      equally familiar ways. We could iterate over these articles (which look and act very much like regular objects in JavaScript) and access
+      their properties just like you would normally using dot notation. For fun, let's just go through each of the 50 articles and output their headlines to the console using this
+      bit of code:</p>
+
+    <pre>     .success(function(resp) {
+        var data = resp.response.results;
+
+        data.forEach(function(article) {
+          console.log(article.fields.headline);
+        });
+
+      });</pre>
+
+    <p>Notice how we iterate over every article in the array we stored in the <code>data</code> variable using an anonymous function.
+    For each call of this anonymous function, we take each article, drill down into the "fields" property, and from there into the
+    "headline" property to get just the data we need. We could easily do the same to get other information from our data, and then pass
+    that data around to our application. This is the beauty of JSON -- it <i>just works</i> with your JavaScript application.</p>
+
+    <p>We keep talking about building a news ticker. We're really all set to begin at this point, so let's get to it.</p>
+
+      <p>
+        <a class="btn btn-primary" href="ticker.html" role="button">Next »</a>
+      </p>
+    </div>
+
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </body>
+</html>
